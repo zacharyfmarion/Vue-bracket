@@ -5,15 +5,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script src="js/vue.js"></script>
-  <script src="js/bracket.js" async></script>
-  <link rel="stylesheet" href="css/bracket.css">
+  <script src="./js/vue.js"></script>
+  <script src="https://gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.4.5/vuefire.js"></script>
+  <script src="./js/bracket.js" async></script>
+  <link rel="stylesheet" href="./css/bracket.css">
   <title>Vue Bracket</title>
 </head>
 
 <body>
   <div id="app">
-    <vue-bracket :tournament="tournament"></vue-bracket>
+    <select v-model="year">
+      <option v-for="validYear in validYears" :value="validYear">{{validYear}}</option>
+    </select>
+    <div class="bracket-container">
+      <div v-if="loading">
+        loading
+      </div>
+      <vue-bracket v-else :tournament="tournament"></vue-bracket>
+    </div>
   </div>
 </body>
 
