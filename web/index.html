@@ -18,11 +18,27 @@
     <select v-model="year">
       <option v-for="validYear in validYears" :value="validYear">{{validYear}}</option>
     </select>
+    <select v-model="displayType">
+      <option v-for="displayOption in displayOptions" :value="displayOption.id">{{displayOption.name}}</option>
+    </select>
     <div class="bracket-container">
-      <div v-if="loading">
+      <div v-if="loading || !tournament">
         loading
       </div>
-      <vue-bracket v-else :tournament="tournament"></vue-bracket>
+      <div v-else>
+        <!-- If we are displaying all the teams altogether -->
+        <div v-if="displayType === 'tournaments'">
+          <vue-bracket :tournament="tournament"></vue-bracket>
+        </div>
+        <!-- If we are displaying teams separately by region -->
+        <div v-else>
+          <div class="tournament-region" v-for="(region, index) in regionOrder" :key="index">
+            <h2>{{region}}</h2>
+            <vue-bracket :tournament="tournament[region]">
+            </vue-bracket>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>

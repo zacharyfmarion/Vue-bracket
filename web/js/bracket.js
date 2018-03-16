@@ -77,6 +77,17 @@ const app = new Vue({
     // The year to select from the tournament dropdown
     year: validYears[0],
     validYears: validYears,
+    displayType: 'tournaments',
+    displayOptions: [
+      {
+        name: 'All together',
+        id: 'tournaments',
+      },
+      {
+        name: 'By Region',
+        id: 'tournaments_by_region',
+      },
+    ],
     tournament: [],
     loading: true,
   },
@@ -87,15 +98,34 @@ const app = new Vue({
     year: function(value) {
       this.getTournament();
     },
+    displayType: function(value) {
+      this.getTournament();
+    },
+  },
+  computed: {
+    // correctly ordering the region so that when they are displayed
+    // separately the finals comes last
+    regionOrder: function() {
+      if (this.displayType === 'tournaments') return [];
+      return Object.keys(this.tournament).sort((region1, region2) => {
+        return (
+          this.tournament[region2][0].length -
+          this.tournament[region1][0].length
+        );
+      });
+    },
   },
   methods: {
     getTournament: function() {
+      this.loading = true;
+      console.log(this.displayType);
       rootRef
+        .child(this.displayType)
         .child(this.year)
         .once('value')
         .then(snapshot => {
           this.tournament = snapshot.val();
-          console.log('tournament', this.tournament);
+          console.log(this.tournament);
           this.loading = false;
         });
     },
