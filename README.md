@@ -31,8 +31,8 @@ const tournament = [
     ],
 
     [
-      { name: 'Player 114', winner: true, ID: 114 },
-      { name: 'Player 214', ID: 214 },
+      { name: 'Player 114', ID: 114 },
+      { name: 'Player 214', winner: true, ID: 214 },
     ],
 
     [
@@ -51,8 +51,8 @@ const tournament = [
     ],
 
     [
-      { name: 'Player 118', winner: true, ID: 118 },
-      { name: 'Player 218', ID: 218 },
+      { name: 'Player 118', ID: 118 },
+      { name: 'Player 218', winner: true, ID: 218 },
     ],
   ],
 
@@ -74,21 +74,21 @@ const tournament = [
     ],
 
     [
-      { name: 'Player 117', winner: true, ID: 117 },
-      { name: 'Player 218', ID: 218 },
+      { name: 'Player 117', ID: 117 },
+      { name: 'Player 218', winner: true, ID: 218 },
     ],
   ],
 
   //-- Round 3
   [
     [
-      { name: 'Player 111', winner: true, ID: 111 },
-      { name: 'Player 113', ID: 113 },
+      { name: 'Player 111', ID: 111 },
+      { name: 'Player 113', winner: true, ID: 113 },
     ],
 
     [
-      { name: 'Player 115', winner: true, ID: 115 },
-      { name: 'Player 218', ID: 218 },
+      { name: 'Player 115', ID: 115 },
+      { name: 'Player 218', winner: true, ID: 218 },
     ],
   ],
 
