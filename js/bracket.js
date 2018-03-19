@@ -782,7 +782,7 @@ const app = new Vue({
   el: '#app',
   data: function() {
     return {
-      activeTab: 'view',
+      activeTab: 'past',
     };
   },
   methods: {
