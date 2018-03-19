@@ -1,0 +1,458 @@
+[
+    [
+        [
+            {
+                "seed": 1, 
+                "name": "Xavier"
+            }, 
+            {
+                "seed": 16, 
+                "name": "Texas Southern"
+            }
+        ], 
+        [
+            {
+                "seed": 8, 
+                "name": "Missouri"
+            }, 
+            {
+                "seed": 9, 
+                "name": "Florida State"
+            }
+        ], 
+        [
+            {
+                "seed": 5, 
+                "name": "Ohio State"
+            }, 
+            {
+                "seed": 12, 
+                "name": "South Dakota State"
+            }
+        ], 
+        [
+            {
+                "seed": 4, 
+                "name": "Gonzaga"
+            }, 
+            {
+                "seed": 13, 
+                "name": "North Carolina-Greensboro"
+            }
+        ], 
+        [
+            {
+                "seed": 6, 
+                "name": "Houston"
+            }, 
+            {
+                "seed": 11, 
+                "name": "San Diego State"
+            }
+        ], 
+        [
+            {
+                "seed": 3, 
+                "name": "Michigan"
+            }, 
+            {
+                "seed": 14, 
+                "name": "Montana"
+            }
+        ], 
+        [
+            {
+                "seed": 7, 
+                "name": "Texas A&M"
+            }, 
+            {
+                "seed": 10, 
+                "name": "Providence"
+            }
+        ], 
+        [
+            {
+                "seed": 2, 
+                "name": "North Carolina"
+            }, 
+            {
+                "seed": 15, 
+                "name": "Lipscomb"
+            }
+        ], 
+        [
+            {
+                "seed": 1, 
+                "name": "Villanova"
+            }, 
+            {
+                "seed": 16, 
+                "name": "Radford"
+            }
+        ], 
+        [
+            {
+                "seed": 8, 
+                "name": "Virginia Tech"
+            }, 
+            {
+                "seed": 9, 
+                "name": "Alabama"
+            }
+        ], 
+        [
+            {
+                "seed": 5, 
+                "name": "West Virginia"
+            }, 
+            {
+                "seed": 12, 
+                "name": "Murray State"
+            }
+        ], 
+        [
+            {
+                "seed": 4, 
+                "name": "Wichita State"
+            }, 
+            {
+                "seed": 13, 
+                "name": "Marshall"
+            }
+        ], 
+        [
+            {
+                "seed": 6, 
+                "name": "Florida"
+            }, 
+            {
+                "seed": 11, 
+                "name": "St. Bonaventure"
+            }
+        ], 
+        [
+            {
+                "seed": 3, 
+                "name": "Texas Tech"
+            }, 
+            {
+                "seed": 14, 
+                "name": "Stephen F. Austin"
+            }
+        ], 
+        [
+            {
+                "seed": 7, 
+                "name": "Arkansas"
+            }, 
+            {
+                "seed": 10, 
+                "name": "Butler"
+            }
+        ], 
+        [
+            {
+                "seed": 2, 
+                "name": "Purdue"
+            }, 
+            {
+                "seed": 15, 
+                "name": "Cal State Fullerton"
+            }
+        ], 
+        [
+            {
+                "seed": 1, 
+                "name": "Kansas"
+            }, 
+            {
+                "seed": 16, 
+                "name": "Pennsylvania"
+            }
+        ], 
+        [
+            {
+                "seed": 8, 
+                "name": "Seton Hall"
+            }, 
+            {
+                "seed": 9, 
+                "name": "North Carolina State"
+            }
+        ], 
+        [
+            {
+                "seed": 5, 
+                "name": "Clemson"
+            }, 
+            {
+                "seed": 12, 
+                "name": "New Mexico State"
+            }
+        ], 
+        [
+            {
+                "seed": 4, 
+                "name": "Auburn"
+            }, 
+            {
+                "seed": 13, 
+                "name": "College of Charleston"
+            }
+        ], 
+        [
+            {
+                "seed": 6, 
+                "name": "Texas Christian"
+            }, 
+            {
+                "seed": 11, 
+                "name": "Syracuse"
+            }
+        ], 
+        [
+            {
+                "seed": 3, 
+                "name": "Michigan State"
+            }, 
+            {
+                "seed": 14, 
+                "name": "Bucknell"
+            }
+        ], 
+        [
+            {
+                "seed": 7, 
+                "name": "Rhode Island"
+            }, 
+            {
+                "seed": 10, 
+                "name": "Oklahoma"
+            }
+        ], 
+        [
+            {
+                "seed": 2, 
+                "name": "Duke"
+            }, 
+            {
+                "seed": 15, 
+                "name": "Iona"
+            }
+        ], 
+        [
+            {
+                "seed": 1, 
+                "name": "Virginia"
+            }, 
+            {
+                "seed": 16, 
+                "name": "Maryland-Baltimore County"
+            }
+        ], 
+        [
+            {
+                "seed": 8, 
+                "name": "Creighton"
+            }, 
+            {
+                "seed": 9, 
+                "name": "Kansas State"
+            }
+        ], 
+        [
+            {
+                "seed": 5, 
+                "name": "Kentucky"
+            }, 
+            {
+                "seed": 12, 
+                "name": "Davidson"
+            }
+        ], 
+        [
+            {
+                "seed": 4, 
+                "name": "Arizona"
+            }, 
+            {
+                "seed": 13, 
+                "name": "Buffalo"
+            }
+        ], 
+        [
+            {
+                "seed": 6, 
+                "name": "Miami (FL)"
+            }, 
+            {
+                "seed": 11, 
+                "name": "Loyola (IL)"
+            }
+        ], 
+        [
+            {
+                "seed": 3, 
+                "name": "Tennessee"
+            }, 
+            {
+                "seed": 14, 
+                "name": "Wright State"
+            }
+        ], 
+        [
+            {
+                "seed": 7, 
+                "name": "Nevada"
+            }, 
+            {
+                "seed": 10, 
+                "name": "Texas"
+            }
+        ], 
+        [
+            {
+                "seed": 2, 
+                "name": "Cincinnati"
+            }, 
+            {
+                "seed": 15, 
+                "name": "Georgia State"
+            }
+        ]
+    ], 
+    [
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ]
+    ], 
+    [
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ]
+    ], 
+    [
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ]
+    ], 
+    [
+        [
+            false, 
+            false
+        ], 
+        [
+            false, 
+            false
+        ]
+    ], 
+    [
+        [
+            false, 
+            false
+        ]
+    ]
+]

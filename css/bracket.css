@@ -14,6 +14,18 @@ body {
   display: flex;
 }
 
+.el-tabs.el-tabs--top {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
 .tournament {
   display: flex;
   flex-direction: row;
