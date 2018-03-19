@@ -26,6 +26,10 @@ body {
   flex-direction: column;
 }
 
+.bracket-select {
+  width: 100%;
+}
+
 .tournament {
   display: flex;
   flex-direction: row;

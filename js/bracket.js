@@ -24,6 +24,7 @@ validYears = getValidYears(1985, 2017);
 // Getting references to the firebase database
 const db = firebaseApp.database();
 const rootRef = db.ref();
+const bracketsRef = db.ref('brackets');
 
 // empty bracket that gets sent to firebase when a user initially
 // create a new one...note that we use false because firebase does
@@ -388,7 +389,7 @@ const emptyBracket = [
 Vue.component('bracket-team', {
   props: {
     team: {
-      type: Object,
+      type: [Object, Boolean],
     },
     // array of two teams that are competing in the round
     // passed in if team is undefined
@@ -396,6 +397,12 @@ Vue.component('bracket-team', {
       type: Array,
     },
     bottom: {
+      type: Boolean,
+    },
+    viewOnly: {
+      type: Boolean,
+    },
+    winner: {
       type: Boolean,
     },
     onWinnerSelected: {
@@ -406,20 +413,24 @@ Vue.component('bracket-team', {
     },
   },
   template: `
-    <li class="game" :class="{'game-top': !bottom, 'game-bottom': bottom, winner: team && team.winner}">
-      <span v-if="team">{{team.name}}</span> 
+    <li class="game" :class="{'game-top': !bottom, 'game-bottom': bottom, winner}">
+      <div v-if="team">
+        <span>
+          {{team.name}}
+          <button @click="onWinnerRemoved" v-if="!viewOnly">x</button>
+        </span> 
+      </div>
       <div v-if="!team && !!teams">
-        <select :value="team ? team.name : ''" @change="handleTeamSelect">
+        <select :value="'Select a team'" @change="handleTeamSelect" class="bracket-select">
           <option v-for="(competitor, index) in teams" :value="index">{{competitor.name}}</option>
         </select>
-        <button @click="onWinnerRemoved">x</button>
       </div>
     </li>
   `,
   methods: {
     handleTeamSelect: function(e) {
       e.preventDefault();
-      this.onWinnerSelected(e.target.value);
+      this.onWinnerSelected(parseInt(e.target.value));
     },
   },
 });
@@ -435,19 +446,40 @@ Vue.component('vue-bracket', {
       required: true,
     },
     /**
+     * Whether or not to only show the team name and not the button
+     * to edit the bracket
+     */
+    viewOnly: {
+      type: Boolean,
+      default: false,
+    },
+    /**
      * Method that is called when the user selects a team to win a match
+     * @param Array - First parameter is an array containing [roundIndex, matchIndex, and teamIndex]
+     * of the team from the previous round that was chosen to win
+     * @param Array - Second param is an array containing [roundIndex, matchIndex, and teamIndex]
+     * of the location the winner will inhabit in the data structure
      */
     onWinnerSelected: {
       type: Function,
       required: false,
+      default: function() {
+        return () => {};
+      },
     },
     /**
      * Function to remove a selection...note that the subsequent selections
      * in later rounds that depend on this team need to be updated
+     * @param Number {roundIndex} - Index of the round
+     * @param Number {matchIndex} - Index of the match within the round
+     * @param Number {teamIndex} - Index of the team (0 or 1) within the match
      */
     onWinnerRemoved: {
       type: Function,
       required: false,
+      default: function() {
+        return () => {};
+      },
     },
   },
   template: `
@@ -455,29 +487,22 @@ Vue.component('vue-bracket', {
       <ul class="round" v-for="(round, roundIndex) in tournament">
         <template v-for="(match, matchIndex) in round" v-if="match.length > 1">
           <li class="spacer">&nbsp;</li>
-          <bracket-team 
-            :team="match[0]" 
-            :teams="getTeams(roundIndex, matchIndex, 0)"
-            :onWinnerSelected="handleWinnerSelected(roundIndex, matchIndex, 0)" 
-            :onWinnerRemoved="handleWinnerRemoved(roundIndex, matchIndex, 0)">
-          </bracket-team>
-          <li class="game game-spacer">&nbsp;</li>
-          <bracket-team 
-            bottom
-            :team="match[1]" 
-            :teams="getTeams(roundIndex, matchIndex, 1)"
-            :onWinnerSelected="handleWinnerSelected(roundIndex, matchIndex, 1)" 
-            :onWinnerRemoved="handleWinnerRemoved(roundIndex, matchIndex, 1)">
-          </bracket-team>
-          <li class="spacer" v-if="matchIndex === round.length -1">&nbsp;</li>
-        </template>
-        <template v-for="(match, matchIndex) in round" v-if="match.length === 1">
-          <bracket-team 
-            :team="match[0]" 
-            :teams="getTeams(roundIndex, matchIndex, 0)"
-            :onWinnerSelected="handleWinnerSelected(roundIndex, matchIndex, 0)" 
-            :onWinnerRemoved="handleWinnerRemoved(roundIndex, matchIndex, 0)">
-          </bracket-team>
+          <template v-for="(team, teamIndex) in match">
+            <bracket-team 
+              :bottom="teamIndex === 1"
+              :team="match[teamIndex]" 
+              :winner="checkWinner(match, teamIndex)"
+              :viewOnly="viewOnly"
+              :teams="getTeams(roundIndex, matchIndex, teamIndex)"
+              :onWinnerSelected="handleWinnerSelected(roundIndex, matchIndex, teamIndex)" 
+              :onWinnerRemoved="handleWinnerRemoved(roundIndex, matchIndex, teamIndex)">
+            </bracket-team>
+            <li 
+              :class="{spacer: teamIndex === 1, game: teamIndex === 0, 'game-spacer': teamIndex === 0}"
+              v-if="matchIndex === round.length -1 || teamIndex === 0">
+                &nbsp;
+            </li>
+          </template>
         </template>
       </ul>
     </div> 
@@ -489,6 +514,9 @@ Vue.component('vue-bracket', {
      */
     validateTounament: function() {
       return true;
+    },
+    previousMatchIndex: function(matchIndex, teamIndex) {
+      return (matchIndex + 1) * 2 + teamIndex - 2;
     },
     /**
      * Get the two teams that competed in the previous round. The winner
@@ -503,33 +531,107 @@ Vue.component('vue-bracket', {
         return null;
       }
       const previousRound = this.tournament[roundIndex - 1][
-        (matchIndex + 1) * 2 - (1 - teamIndex) - 1
+        this.previousMatchIndex(matchIndex, teamIndex)
       ];
       if (!previousRound[0] || !previousRound[1]) {
         return null;
       }
       return previousRound;
     },
+    // get winner of current round
+    checkWinner: function(match, teamIndex) {
+      return teamIndex === 0
+        ? match[0].score > match[1].score
+        : match[1].score > match[0].score;
+    },
     // handlers for passing the correct information in a bound function
     handleWinnerSelected: function(roundIndex, matchIndex, teamIndex) {
-      if (!this.onWinnerSelected) return null;
       return index =>
         this.onWinnerSelected(
-          roundIndex - 1,
-          (matchIndex + 1) * 2 - (1 - teamIndex) - 1,
-          index
+          [
+            roundIndex - 1,
+            this.previousMatchIndex(matchIndex, teamIndex),
+            index,
+          ],
+          [roundIndex, matchIndex, teamIndex]
         );
     },
     handleWinnerRemoved: function(roundIndex, matchIndex, teamIndex) {
-      if (!this.onWinnerRemoved) return null;
       return () => this.onWinnerRemoved(roundIndex, matchIndex, teamIndex);
+    },
+  },
+});
+
+// Top level tab component
+Vue.component('created-list-tab', {
+  props: {
+    onWinnerSelected: {
+      type: Function,
+    },
+    onWinnerRemoved: {
+      type: Function,
+    },
+  },
+  firebase: {
+    brackets: bracketsRef,
+  },
+  template: `
+    <div>
+      <el-select v-model="activeNetId" placeholder="Choose a netid">
+        <el-option
+          v-for="bracket in brackets"
+          :key="bracket['.key']"
+          :label="bracket['.key']"
+          :value="bracket['.key']">
+        </el-option>
+      </el-select>  
+      <div v-if="activeNetId">
+        <vue-bracket 
+          :tournament="activeBracket" 
+          :onWinnerSelected="handleWinnerSelected" 
+          :onWinnerRemoved="handleWinnerRemoved">
+        </vue-bracket>
+      </div>
+    </div> 
+  `,
+  data: function() {
+    return {
+      activeNetId: null,
+    };
+  },
+  computed: {
+    activeBracket: function() {
+      if (!this.activeNetId) return null;
+      return this.brackets.find(
+        bracket => bracket['.key'] === this.activeNetId
+      )['.value'];
+    },
+  },
+  methods: {
+    // need to wrap this to pass in netId
+    handleWinnerSelected: function(oldPath, newPath) {
+      this.onWinnerSelected(oldPath, newPath, this.activeNetId);
+    },
+    // need to wrap this to pass in netId
+    handleWinnerRemoved: function(roundIndex, matchIndex, teamIndex) {
+      this.onWinnerRemoved(roundIndex, matchIndex, teamIndex, this.activeNetId);
     },
   },
 });
 
 // Just an organizational component representing the tab where you can create
 // a bracket
-Vue.component('create-bracket', {
+Vue.component('create-bracket-tab', {
+  props: {
+    onWinnerSelected: {
+      type: Function,
+      required: false,
+    },
+    onWinnerRemoved: {
+      type: Function,
+      required: false,
+    },
+  },
   template: `
     <div>
       <div v-if="!tournament" class="flex">
@@ -537,7 +639,10 @@ Vue.component('create-bracket', {
         <el-button type="primary" @click="createBracket">Create Bracket</el-button>
       </div>
       <div v-else>
-        <vue-bracket v-bind="{tournament, onWinnerSelected, onWinnerRemoved}">
+        <vue-bracket 
+          :tournament="tournament" 
+          :onWinnerSelected="handleWinnerSelected" 
+          :onWinnerRemoved="handleWinnerRemoved">
         </vue-bracket>
       </div>
     </div> 
@@ -550,31 +655,69 @@ Vue.component('create-bracket', {
   },
   methods: {
     createBracket: function() {
-      rootRef
-        .child('brackets')
+      bracketsRef
         .child(this.netId)
         .set(emptyBracket)
         .then(() => {
           this.tournament = emptyBracket;
         });
+      // add listener that watches for data changes
+      bracketsRef.child(this.netId).on('value', snapshot => {
+        this.tournament = snapshot.val();
+      });
     },
-    onWinnerSelected: function(roundIndex, matchIndex, teamIndex) {
-      console.log('selecting winnner', roundIndex, matchIndex, teamIndex);
+    // need to wrap this to pass in netId
+    handleWinnerSelected: function(oldPath, newPath) {
+      this.onWinnerSelected(oldPath, newPath, this.netId);
     },
-    onWinnerRemoved: function(roundIndex, matchIndex, teamIndex) {
-      console.log('removing winner', roundIndex, matchIndex, teamIndex);
+    // need to wrap this to pass in netId
+    handleWinnerRemoved: function(roundIndex, matchIndex, teamIndex) {
+      this.onWinnerRemoved(roundIndex, matchIndex, teamIndex, this.netId);
     },
   },
 });
 
-const app = new Vue({
-  el: '#app',
+Vue.component('past-tournaments-tab', {
+  template: `
+    <div>
+      <el-select v-model="year" placeholder="Select Year">
+        <el-option v-for="validYear in validYears" :key="validYear" :label="validYear" :value="validYear">
+        </el-option>
+      </el-select>
+      <el-select v-model="displayType" placeholder="Select Display Type">
+        <el-option v-for="displayOption in displayOptions" :key="displayOption.id" :label="displayOption.name" :value="displayOption.id">
+        </el-option>
+      </el-select>
+      <div class="bracket-container">
+        <div v-if="loading || !tournament">
+          loading
+        </div>
+        <div v-else>
+          <!-- If we are displaying all the teams altogether -->
+          <div v-if="displayType === 'tournaments'">
+            <vue-bracket :tournament="tournament" viewOnly>
+            </vue-bracket>
+          </div>
+          <!-- If we are displaying teams separately by region -->
+          <div v-else>
+            <div class="tournament-region" v-for="(region, index) in regionOrder" :key="index">
+              <h2>{{region}}</h2>
+              <vue-bracket :tournament="tournament[region]" viewOnly>
+              </vue-bracket>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  created: function() {
+    this.getTournament();
+  },
   data: function() {
     return {
       // The year to select from the tournament dropdown
       year: validYears[0],
       validYears: validYears,
-      activeTab: 'create',
       displayType: 'tournaments',
       displayOptions: [
         {
@@ -590,17 +733,6 @@ const app = new Vue({
       loading: true,
     };
   },
-  created: function() {
-    this.getTournament();
-  },
-  watch: {
-    year: function(value) {
-      this.getTournament();
-    },
-    displayType: function(value) {
-      this.getTournament();
-    },
-  },
   computed: {
     // correctly ordering the region so that when they are displayed
     // separately the finals comes last
@@ -614,6 +746,14 @@ const app = new Vue({
       });
     },
   },
+  watch: {
+    year: function(value) {
+      this.getTournament();
+    },
+    displayType: function(value) {
+      this.getTournament();
+    },
+  },
   methods: {
     getTournament: function() {
       this.loading = true;
@@ -623,11 +763,47 @@ const app = new Vue({
         .once('value')
         .then(snapshot => {
           this.tournament = snapshot.val();
-          console.log(this.tournament);
           this.loading = false;
         });
     },
-    handleWinnerSelected: function() {},
-    handleWinnerRemoved: function() {},
+  },
+});
+
+const app = new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      activeTab: 'view',
+    };
+  },
+  methods: {
+    onWinnerSelected: function(
+      [lastRoundIndex, lastMatchIndex, lastTeamIndex],
+      [roundIndex, matchIndex, teamIndex],
+      netId
+    ) {
+      bracketsRef
+        .child(netId)
+        .child(lastRoundIndex)
+        .child(lastMatchIndex)
+        .child(lastTeamIndex)
+        .once('value', snapshot => {
+          const team = snapshot.val();
+          bracketsRef
+            .child(netId)
+            .child(roundIndex)
+            .child(matchIndex)
+            .child(teamIndex)
+            .set(team);
+        });
+    },
+    onWinnerRemoved: function(roundIndex, matchIndex, teamIndex, netId) {
+      bracketsRef
+        .child(netId)
+        .child(roundIndex)
+        .child(matchIndex)
+        .child(teamIndex)
+        .set(false);
+    },
   },
 });

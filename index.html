@@ -22,38 +22,15 @@
     <el-tabs v-model="activeTab">
       <!-- First tab for viewing past tournaments -->
       <el-tab-pane label="View Past Tournaments" name="past">
-        <el-select v-model="year" placeholder="Select Year">
-          <el-option v-for="validYear in validYears" :key="validYear" :label="validYear" :value="validYear">
-          </el-option>
-        </el-select>
-        <el-select v-model="displayType" placeholder="Select Display Type">
-          <el-option v-for="displayOption in displayOptions" :key="displayOption.id" :label="displayOption.name" :value="displayOption.id">
-          </el-option>
-        </el-select>
-        <div class="bracket-container">
-          <div v-if="loading || !tournament">
-            loading
-          </div>
-          <div v-else>
-            <!-- If we are displaying all the teams altogether -->
-            <div v-if="displayType === 'tournaments'">
-              <vue-bracket :tournament="tournament">
-              </vue-bracket>
-            </div>
-            <!-- If we are displaying teams separately by region -->
-            <div v-else>
-              <div class="tournament-region" v-for="(region, index) in regionOrder" :key="index">
-                <h2>{{region}}</h2>
-                <vue-bracket :tournament="tournament[region]">
-                </vue-bracket>
-              </div>
-            </div>
-          </div>
-        </div>
+        <past-tournaments-tab></past-tournaments-tab>
       </el-tab-pane>
-      <!-- Second tab for creating your own bracket -->
+      <!-- Second tab for viewing created brackets -->
+      <el-tab-pane label="View Student Brackets" name="view">
+        <created-list-tab v-bind="{onWinnerSelected, onWinnerRemoved}"></created-list-tab>
+      </el-tab-pane>
+      <!-- Third tab for making a bracket-->
       <el-tab-pane label="Make a Bracket" name="create">
-        <create-bracket></create-bracket>
+        <create-bracket-tab v-bind="{onWinnerSelected, onWinnerRemoved}"></create-bracket-tab>
       </el-tab-pane>
     </el-tabs>
   </div>
