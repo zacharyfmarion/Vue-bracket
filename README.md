@@ -2,6 +2,15 @@
 
 > Simple component for rendering a bracket.
 
+## Installation
+
+You can easily use the component with the following cdns:
+
+```html
+  <script src="https://cdn.jsdelivr.net/gh/zacharyfmarion/vue-bracket@1.0/build/vue-bracket.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zacharyfmarion/vue-bracket@1.0/build/vue-bracket.css">
+```
+
 ## Props
 
 ```javascript
