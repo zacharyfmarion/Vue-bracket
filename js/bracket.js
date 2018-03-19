@@ -414,11 +414,11 @@ Vue.component('bracket-team', {
   },
   template: `
     <li class="game" :class="{'game-top': !bottom, 'game-bottom': bottom, winner}">
-      <div v-if="team">
-        <span>
-          {{team.name}}
-          <button @click="onWinnerRemoved" v-if="!viewOnly">x</button>
-        </span> 
+      <div v-if="team" class="flex flex-auto game-wrapper">
+        <div>
+          {{teamName}}
+        </div> 
+        <button @click="onWinnerRemoved" v-if="!viewOnly">x</button>
       </div>
       <div v-if="!team && !!teams">
         <select :value="'Select a team'" @change="handleTeamSelect" class="bracket-select">
@@ -427,6 +427,12 @@ Vue.component('bracket-team', {
       </div>
     </li>
   `,
+  computed: {
+    teamName: function() {
+      if (!this.team) return '';
+      return this.team.name + (this.team.seed ? ` (${this.team.seed})` : '');
+    },
+  },
   methods: {
     handleTeamSelect: function(e) {
       e.preventDefault();

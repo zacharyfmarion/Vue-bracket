@@ -4,7 +4,56 @@
 
 ## Props
 
-Component accepts one prop called `tournament`, which accepts an array of the type displayed below
+```javascript
+props: {
+  /**
+    * An array of rounds, which are themselves arrays
+    * of individual matches
+    */
+  tournament: {
+    type: Array,
+    required: true,
+  },
+  /**
+    * Whether or not to only show the team name and not the button
+    * to edit the bracket
+    */
+  viewOnly: {
+    type: Boolean,
+    default: false,
+  },
+  /**
+    * Method that is called when the user selects a team to win a match
+    * @param Array - First parameter is an array containing [roundIndex, matchIndex, and teamIndex]
+    * of the team from the previous round that was chosen to win
+    * @param Array - Second param is an array containing [roundIndex, matchIndex, and teamIndex]
+    * of the location the winner will inhabit in the data structure
+    */
+  onWinnerSelected: {
+    type: Function,
+    required: false,
+    default: function() {
+      return () => {};
+    },
+  },
+  /**
+    * Function to remove a selection...note that the subsequent selections
+    * in later rounds that depend on this team need to be updated
+    * @param Number {roundIndex} - Index of the round
+    * @param Number {matchIndex} - Index of the match within the round
+    * @param Number {teamIndex} - Index of the team (0 or 1) within the match
+    */
+  onWinnerRemoved: {
+    type: Function,
+    required: false,
+    default: function() {
+      return () => {};
+    },
+  },
+}
+```
+
+The format of the tournament prop is displayed below:
 
 ```javascript
 const tournament = [
@@ -102,10 +151,4 @@ const tournament = [
   //-- Champion
   [[{ name: 'Player 113', winner: true, ID: 113 }]],
 ];
-```
-
-This component would be rendered as follows:
-
-```html
-<vue-bracket :tournament="tournament"></vue-bracket>
 ```
