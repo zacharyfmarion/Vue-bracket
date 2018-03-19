@@ -562,7 +562,12 @@ Vue.component('vue-bracket', {
   },
 });
 
-// Top level tab component
+/**
+ * -----------------------------------------------------------------------
+ * Top Level tab components
+ * -----------------------------------------------------------------------
+ */
+
 Vue.component('created-list-tab', {
   props: {
     onWinnerSelected: {
@@ -755,6 +760,10 @@ Vue.component('past-tournaments-tab', {
     },
   },
   methods: {
+    /**
+     * Note that we don't use vue-fire for the tournament for perf
+     * reasons
+     */
     getTournament: function() {
       this.loading = true;
       rootRef
