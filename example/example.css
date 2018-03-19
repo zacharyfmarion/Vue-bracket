@@ -1,0 +1,11 @@
+body {
+  font-family: sans-serif;
+}
+
+#app {
+  display: flex;
+}
+
+.el-tabs.el-tabs--top {
+  width: 100%;
+}

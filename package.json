@@ -1,0 +1,30 @@
+{
+  "name": "vue-bracket",
+  "version": "1.0.0",
+  "description": "A bracket component for vue.js",
+  "main": "dist/vue-bracket.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "build": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zacharyfmarion/Vue-bracket.git"
+  },
+  "keywords": ["bracket", "ncaa", "vue"],
+  "author": "Zachary Marion",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zacharyfmarion/Vue-bracket/issues"
+  },
+  "homepage": "https://github.com/zacharyfmarion/Vue-bracket#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.9.3",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^2.1.0"
+  }
+}
