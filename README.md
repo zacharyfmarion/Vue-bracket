@@ -62,7 +62,7 @@ props: {
 }
 ```
 
-The format of the tournament prop is displayed below:
+The format of the tournament prop is displayed below. For an incomplete bracket, use `null` or `false` instead of the team object.
 
 ```javascript
 const tournament = [
